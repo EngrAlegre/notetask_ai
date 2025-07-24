@@ -374,7 +374,7 @@ class _NotesScreenState extends State<NotesScreen>
   }
 
   void _onTextNote() {
-    Navigator.pushNamed(context, '/note-editor');
+    Navigator.pushNamed(context, '/note-editor', arguments: {'type': 'note'});
   }
 
   void _onVoiceNote() {
@@ -382,7 +382,7 @@ class _NotesScreenState extends State<NotesScreen>
   }
 
   void _onAINote() {
-    Navigator.pushNamed(context, '/ai-note');
+    Navigator.pushNamed(context, '/ai-assistant-screen');
   }
 
   @override

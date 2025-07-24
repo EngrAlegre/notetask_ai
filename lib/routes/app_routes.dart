@@ -5,6 +5,9 @@ import '../presentation/login_screen/login_screen.dart';
 import '../presentation/registration_screen/registration_screen.dart';
 import '../presentation/overview_screen/overview_screen.dart';
 import '../presentation/notes_screen/notes_screen.dart';
+import '../presentation/note_editor_screen/note_editor_screen.dart';
+import '../presentation/ai_assistant_screen/ai_assistant_screen.dart';
+import '../presentation/tasks_screen/tasks_screen.dart';
 
 class AppRoutes {
   // TODO: Add your routes here
@@ -15,6 +18,9 @@ class AppRoutes {
   static const String registrationScreen = '/registration-screen';
   static const String overviewScreen = '/overview-screen';
   static const String notesScreen = '/notes-screen';
+  static const String noteEditor = '/note-editor';
+  static const String aiAssistantScreen = '/ai-assistant-screen';
+  static const String tasksScreen = '/tasks-screen';
 
   static Map<String, WidgetBuilder> routes = {
     initial: (context) => const SplashScreen(),
@@ -24,6 +30,15 @@ class AppRoutes {
     registrationScreen: (context) => const RegistrationScreen(),
     overviewScreen: (context) => const OverviewScreen(),
     notesScreen: (context) => const NotesScreen(),
+    noteEditor: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      return NoteEditorScreen(
+        noteId: args?['noteId'],
+        type: args?['type'] ?? 'note',
+      );
+    },
+    aiAssistantScreen: (context) => const AiAssistantScreen(),
+    tasksScreen: (context) => const TasksScreen(),
     // TODO: Add your other routes here
   };
 }
