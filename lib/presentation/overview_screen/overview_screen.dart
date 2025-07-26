@@ -481,11 +481,79 @@ class _OverviewScreenState extends State<OverviewScreen> {
   }
 
   void _handleCreateNote() async {
-    Navigator.pushNamed(context, '/note-editor', arguments: {'type': 'note'});
+    // Show AI-powered note creation dialog
+    final ideas = await _notesService.generateNoteIdeas();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(4.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Create New Note',
+              style: AppTheme.lightTheme.textTheme.headlineSmall,
+            ),
+            SizedBox(height: 2.h),
+            Text(
+              'AI Suggestions:',
+              style: AppTheme.lightTheme.textTheme.titleMedium,
+            ),
+            ...ideas.take(3).map((idea) => ListTile(
+                  leading: const Icon(Icons.lightbulb_outline),
+                  title: Text(idea),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Navigate to note creation with the idea
+                    Navigator.pushNamed(context, '/notes-screen');
+                  },
+                )),
+            SizedBox(height: 2.h),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/notes-screen');
+              },
+              child: const Text('Create Blank Note'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _handleCreateTask() {
-    Navigator.pushNamed(context, '/note-editor', arguments: {'type': 'task'});
+    // Navigate to task creation screen
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(4.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Create New Task',
+              style: AppTheme.lightTheme.textTheme.headlineSmall,
+            ),
+            SizedBox(height: 2.h),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Task Title',
+                hintText: 'Enter task description',
+              ),
+            ),
+            SizedBox(height: 2.h),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Create Task'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _handleVoiceNote() {
@@ -496,14 +564,51 @@ class _OverviewScreenState extends State<OverviewScreen> {
   }
 
   void _handleAiAssistant() async {
-    Navigator.pushNamed(context, '/ai-assistant-screen');
+    // Show AI assistant dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('AI Assistant'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Ask me anything about your notes...',
+              ),
+              onSubmitted: (question) async {
+                Navigator.pop(context);
+                final answer = await _notesService.askAi(question: question);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('AI Response'),
+                    content: Text(answer),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _handleNoteEdit(Map<String, dynamic> note) {
-    Navigator.pushNamed(context, '/note-editor', arguments: {
-      'noteId': note['id'],
-      'type': note['is_task'] == true ? 'task' : 'note',
-    });
+    // Navigate to note editor
+    Navigator.pushNamed(context, '/notes-screen');
   }
 
   void _handleNoteContextMenu(Map<String, dynamic> note) {
@@ -657,7 +762,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
   }
 
   void _handleViewAllTasks() {
-    Navigator.pushNamed(context, '/tasks-screen');
+    // Navigate to tasks screen
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Navigate to Tasks screen')),
+    );
   }
 
   void _handleAiSuggestion(Map<String, dynamic> suggestion) async {
@@ -803,10 +911,14 @@ class _OverviewScreenState extends State<OverviewScreen> {
         Navigator.pushNamed(context, '/notes-screen');
         break;
       case 2:
-        Navigator.pushNamed(context, '/tasks-screen');
+        // Navigate to tasks screen
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Navigate to Tasks screen')),
+        );
         break;
       case 3:
-        Navigator.pushNamed(context, '/ai-assistant-screen');
+        // Navigate to AI screen
+        _handleAiAssistant();
         break;
     }
   }

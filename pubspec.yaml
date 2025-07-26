@@ -29,13 +29,6 @@ dependencies:
   # Additional authentication dependencies
   google_sign_in: ^6.2.1
   crypto: ^3.0.3
-  
-  # Voice and biometric features
-  speech_to_text: ^6.6.0
-  local_auth: ^2.1.6
-  
-  # Notifications
-  flutter_local_notifications: ^17.2.1+2
 
   web: any
 dev_dependencies:
