@@ -29,6 +29,16 @@ dependencies:
   # Additional authentication dependencies
   google_sign_in: ^6.2.1
   crypto: ^3.0.3
+  
+  # Voice and biometric features
+  speech_to_text: ^7.0.0
+  local_auth: ^2.3.0
+  
+  # Push notifications
+  flutter_local_notifications: ^17.2.3
+  
+  # Enhanced gestures
+  flutter_slidable: ^3.1.1
 
   web: any
 dev_dependencies:
