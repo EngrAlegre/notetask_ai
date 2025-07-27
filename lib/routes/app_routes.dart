@@ -18,6 +18,9 @@ class AppRoutes {
   static const String tasksScreen = '/tasks-screen';
   static const String aiAssistantScreen = '/ai-assistant-screen';
   static const String noteEditor = '/note-editor';
+  static const String settingsScreen = '/settings-screen';
+  static const String searchScreen = '/search-screen';
+  static const String profileScreen = '/profile-screen';
 
   static Map<String, WidgetBuilder> routes = {
     initial: (context) => const SplashScreen(),
@@ -36,6 +39,9 @@ class AppRoutes {
         type: args?['type'] ?? 'note',
       );
     },
+    settingsScreen: (context) => const SettingsScreen(),
+    searchScreen: (context) => const SearchScreen(),
+    profileScreen: (context) => const ProfileScreen(),
     // TODO: Add your other routes here
   };
 }
